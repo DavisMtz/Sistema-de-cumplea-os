@@ -83,8 +83,8 @@ function actualizarDashboard(lista) {
     const fila = inicio + i;
     hoja.setRowHeight(fila, 30);
 
-    // Rayado tipo "zebra" para lectura cómoda
-    if (i % 2 === 1) hoja.getRange(fila, 2, 1, 5).setBackground("#FAFAFA");
+    // Rayado tipo "zebra" muy sutil para lectura cómoda
+    if (i % 2 === 1) hoja.getRange(fila, 2, 1, 5).setBackground("#FCFCFC");
 
     // Color de urgencia en la celda "Faltan" (columna D = 4)
     const u = colorUrgencia(p.diasRestantes, c);
@@ -101,14 +101,16 @@ function actualizarDashboard(lista) {
 
 /**
  * Devuelve los colores (fondo/texto) según qué tan cerca está el cumpleaños.
- *  - HOY        → rosa Liverpool
- *  - ≤ 3 días   → rojo
- *  - ≤ 10 días  → morado
- *  - más lejano → azul suave
+ * Paleta MINIMALISTA monocromática: solo rosa Liverpool + grises. La urgencia
+ * se comunica por intensidad, no por colores distintos.
+ *  - HOY        → rosa Liverpool sólido
+ *  - ≤ 3 días   → rosa muy claro, texto rosa intenso
+ *  - ≤ 10 días  → gris claro, texto gris oscuro
+ *  - más lejano → blanco, texto gris medio
  */
 function colorUrgencia(dias, c) {
   if (dias === 0)  return { bg: c.primario, fg: "#FFFFFF" };
-  if (dias <= 3)   return { bg: "#FEF2F2", fg: "#B91C1C" };
-  if (dias <= 10)  return { bg: "#F5F3FF", fg: "#6D28D9" };
-  return { bg: "#EFF6FF", fg: "#1D4ED8" };
+  if (dias <= 3)   return { bg: "#FCE7F3", fg: c.primario };
+  if (dias <= 10)  return { bg: "#F3F4F6", fg: c.secundario };
+  return { bg: "#FFFFFF", fg: c.textoCuerpo };
 }

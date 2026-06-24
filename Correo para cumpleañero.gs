@@ -30,7 +30,7 @@ function enviarFelicitacionCumpleanero() {
 
     MailApp.sendEmail({
       to: correo,
-      subject: `🎈 ¡Hoy te celebramos, ${nombre}! 🎉 – VENTEL`,
+      subject: `Hoy te celebramos, ${nombre} · VENTEL`,
       htmlBody: construirCorreoCumpleanero(nombre),
       name: CONFIG.marca.nombreRemitente
     });
@@ -45,46 +45,41 @@ function construirCorreoCumpleanero(nombre) {
   const C = CONFIG.marca.colores;
 
   return envolturaLiverpool({
-    sombraFuerte: true,
-    paddingHeader: "35px 20px",
-    pie: "¡Feliz cumpleaños de parte de todo el equipo! 🧡",
+    paddingHeader: "40px 20px 34px",
+    pie: "Feliz cumpleaños de parte de todo el equipo.",
     headerExtra: `
-        <div style="display: inline-block; background-color: rgba(255,255,255,0.2); border-radius: 30px; padding: 6px 16px; margin: 25px 0 15px;">
-          <span style="color: #ffffff; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Tu día especial</span>
-        </div>
-        <h1 style="color: #ffffff; margin: 0; font-size: 30px; font-weight: 800; line-height: 1.2;">
-          ¡Feliz cumpleaños,<br>${nombre}! 🎂
+        <div style="color: rgba(255,255,255,0.85); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; margin: 26px 0 12px;">Tu día especial</div>
+        <h1 style="color: #ffffff; margin: 0; font-size: 30px; font-weight: 600; line-height: 1.25;">
+          Feliz cumpleaños, ${nombre}
         </h1>`,
     contenido: `
-        <p style="font-size: 16px; text-align: center; color: ${C.textoCuerpo}; margin: 0 0 30px 0; line-height: 1.6;">
+        <p style="font-size: 16px; color: ${C.textoCuerpo}; margin: 0 0 28px 0; line-height: 1.7;">
           En VENTEL no solo celebramos un año más de tu vida, sino todo lo que
-          representas para el equipo. <strong style="color: ${C.textoTitulo};">Hoy eres el corazón de nuestras felicitaciones.</strong> 💖
+          representas para el equipo. <strong style="color: ${C.textoTitulo}; font-weight: 600;">Hoy eres el corazón de nuestras felicitaciones.</strong>
         </p>
 
-        <!-- Mensaje destacado -->
-        <div style="background-color: #FFF1F2; border-left: 4px solid ${C.primario}; padding: 18px 20px; border-radius: 0 8px 8px 0; margin-bottom: 25px;">
-          <p style="margin: 0; font-size: 15px; color: ${C.textoTitulo}; line-height: 1.6;">
-            🌟 <strong>${nombre}, este día es para ti, por ti y contigo.</strong><br>
-            Todo el equipo te reconoce como una parte esencial de nuestro éxito en ventas.
-          </p>
-        </div>
+        <!-- Frase destacada: línea fina, sin caja -->
+        <p style="margin: 0; padding-left: 18px; border-left: 2px solid ${C.primario}; font-size: 16px; color: ${C.textoTitulo}; line-height: 1.6;">
+          ${nombre}, este día es para ti, por ti y contigo.
+        </p>
+        <p style="font-size: 15px; color: ${C.textoCuerpo}; margin: 18px 0 0; padding-left: 18px; line-height: 1.7;">
+          Todo el equipo te reconoce como una parte esencial de nuestro éxito en ventas.
+        </p>
 
         <!-- Frase inspiradora -->
-        <p style="font-size: 15px; color: ${C.textoCuerpo}; text-align: center; font-style: italic; margin: 30px 0; line-height: 1.6;">
+        <p style="font-size: 15px; color: ${C.textoCuerpo}; font-style: italic; margin: 36px 0; line-height: 1.7;">
           “Un cumpleaños no solo celebra el paso del tiempo, sino la huella que
           dejas en quienes te rodean.”
         </p>
 
         <!-- Tu camino en VENTEL -->
-        <div style="background-color: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 10px; padding: 18px 20px;">
-          <p style="margin: 0; font-size: 14px; color: ${C.textoCuerpo}; line-height: 1.6;">
-            💼 <strong style="color: ${C.textoTitulo};">Tu camino en VENTEL sigue creciendo:</strong><br>
-            Cada año suma experiencia, fortalece tu talento y te acerca más a tus
-            metas. ¡Sigue adelante, estamos contigo en cada paso!
-          </p>
-        </div>
+        ${etiquetaSeccion("Tu camino en VENTEL")}
+        <p style="margin: 6px 0 0; font-size: 15px; color: ${C.textoCuerpo}; line-height: 1.7;">
+          Cada año suma experiencia, fortalece tu talento y te acerca más a tus
+          metas. Sigue adelante: estamos contigo en cada paso.
+        </p>
 
-        ${cintilloDegradado()}
+        ${divisorMinimal()}
     `
   });
 }

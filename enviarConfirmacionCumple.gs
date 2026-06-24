@@ -31,7 +31,7 @@ function enviarConfirmacionCumple() {
 
   MailApp.sendEmail({
     to: persona.correo,
-    subject: "🎉 Confirmación de registro – Cumpleaños en VENTEL",
+    subject: "Confirmación de registro · Cumpleaños VENTEL",
     htmlBody: construirCorreoConfirmacion(persona),
     name: CONFIG.marca.nombreRemitente
   });
@@ -56,34 +56,31 @@ function construirCorreoConfirmacion(persona) {
   });
 
   return envolturaLiverpool({
-    pie: "Tu registro quedó guardado correctamente ✅",
+    pie: "Tu registro quedó guardado correctamente.",
     contenido: `
-        <p style="text-align: right; font-size: 12px; color: #9CA3AF; margin: 0 0 20px 0;">📅 Confirmado el ${fechaHoy}</p>
-
-        <h2 style="color: ${C.textoTitulo}; text-align: center; margin: 0 0 8px 0; font-size: 22px; font-weight: 700;">
-          ¡Gracias, ${persona.nombre}! ✅
+        ${etiquetaSeccion("Confirmado el " + fechaHoy)}
+        <h2 style="color: ${C.textoTitulo}; margin: 12px 0 8px 0; font-size: 24px; font-weight: 600; line-height: 1.3;">
+          Gracias, ${persona.nombre}
         </h2>
-        <p style="text-align: center; color: ${C.textoCuerpo}; font-size: 15px; margin: 0 0 30px 0; line-height: 1.6;">
+        <p style="color: ${C.textoCuerpo}; font-size: 15px; margin: 0 0 32px 0; line-height: 1.7;">
           Tu respuesta fue registrada con éxito. Este es el resumen de la
           información que capturaste en el sistema de cumpleaños de VENTEL.
         </p>
 
-        <!-- Fecha de cumpleaños destacada -->
-        <div style="background-color: #FFF1F2; border-left: 4px solid ${C.primario}; padding: 16px 20px; border-radius: 0 8px 8px 0; margin-bottom: 10px;">
-          <p style="margin: 0; font-size: 16px; color: ${C.textoTitulo};">
-            🎂 Tu cumpleaños: <strong>${persona.dia} de ${persona.mesTexto}</strong>
-          </p>
-        </div>
+        <!-- Fecha de cumpleaños: bloque tipográfico, sin caja -->
+        ${bloqueFecha("Tu cumpleaños", persona.dia + " de " + persona.mesTexto)}
 
-        <h3 style="font-size: 15px; color: ${C.textoTitulo}; margin: 25px 0 0; text-transform: uppercase; letter-spacing: 0.5px;">Tus preferencias registradas</h3>
+        <div style="margin-top: 32px;">
+          ${etiquetaSeccion("Tus preferencias registradas")}
+        </div>
         ${detalles}
 
-        <p style="font-size: 14px; color: ${C.textoCuerpo}; margin-top: 25px; line-height: 1.6;">
-          ¿Necesitas corregir algo? Acércate con alguna <strong>supervisora</strong>
-          o <strong>apoyo</strong> en turno y con gusto lo actualizamos.
+        <p style="font-size: 14px; color: ${C.textoCuerpo}; margin-top: 28px; line-height: 1.7;">
+          ¿Necesitas corregir algo? Acércate con alguna supervisora o apoyo en
+          turno y con gusto lo actualizamos.
         </p>
 
-        ${cintilloDegradado()}
+        ${divisorMinimal()}
     `
   });
 }
