@@ -43,43 +43,54 @@ function enviarFelicitacionCumpleanero() {
  */
 function construirCorreoCumpleanero(nombre) {
   const C = CONFIG.marca.colores;
+  // Solo el primer nombre para un tono más cercano y personal.
+  const primerNombre = (nombre || "").toString().trim().split(/\s+/)[0] || nombre;
 
   return envolturaLiverpool({
-    paddingHeader: "40px 20px 34px",
-    pie: "Feliz cumpleaños de parte de todo el equipo.",
+    preheader: `Hoy todo el equipo VENTEL celebra contigo, ${primerNombre}.`,
+    // Header más alto y expresivo: este correo debe sentirse especial.
+    paddingHeader: "52px 28px 46px",
+    pie: "Con cariño, todo el equipo VENTEL.",
     headerExtra: `
-        <div style="color: rgba(255,255,255,0.85); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; margin: 26px 0 12px;">Tu día especial</div>
-        <h1 style="color: #ffffff; margin: 0; font-size: 30px; font-weight: 600; line-height: 1.25;">
-          Feliz cumpleaños, ${nombre}
-        </h1>`,
+        <div style="font-family:${FUENTE}; color:rgba(255,255,255,0.92); font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:3px; margin:30px 0 16px;">Feliz cumpleaños</div>
+        <h1 style="font-family:${FUENTE}; color:#ffffff; margin:0; font-size:40px; font-weight:700; line-height:1.1; letter-spacing:-0.5px;">
+          ${primerNombre}
+        </h1>
+        <div style="margin-top:18px; color:rgba(255,255,255,0.9); font-size:13px; letter-spacing:8px; line-height:1;">&#10022;&nbsp;&#10022;&nbsp;&#10022;</div>`,
     contenido: `
-        <p style="font-size: 16px; color: ${C.textoCuerpo}; margin: 0 0 28px 0; line-height: 1.7;">
+        <p style="font-family:${FUENTE}; font-size:18px; color:${C.textoTitulo}; margin:0 0 8px 0; line-height:1.5; font-weight:600; text-align:center;">
+          Hoy es tu día, ${primerNombre}.
+        </p>
+        <p style="font-family:${FUENTE}; font-size:16px; color:${C.textoCuerpo}; margin:0 0 32px 0; line-height:1.75; text-align:center;">
           En VENTEL no solo celebramos un año más de tu vida, sino todo lo que
-          representas para el equipo. <strong style="color: ${C.textoTitulo}; font-weight: 600;">Hoy eres el corazón de nuestras felicitaciones.</strong>
+          representas para nosotros.
         </p>
 
-        <!-- Frase destacada: línea fina, sin caja -->
-        <p style="margin: 0; padding-left: 18px; border-left: 2px solid ${C.primario}; font-size: 16px; color: ${C.textoTitulo}; line-height: 1.6;">
-          ${nombre}, este día es para ti, por ti y contigo.
+        <!-- Frase destacada: acento rosa, centrada y con aire -->
+        <p style="font-family:${FUENTE}; margin:0 auto; max-width:420px; font-size:17px; color:${C.textoTitulo}; line-height:1.55; text-align:center; font-weight:600;">
+          Eres el corazón de nuestras felicitaciones.
         </p>
-        <p style="font-size: 15px; color: ${C.textoCuerpo}; margin: 18px 0 0; padding-left: 18px; line-height: 1.7;">
-          Todo el equipo te reconoce como una parte esencial de nuestro éxito en ventas.
-        </p>
+
+        ${sparkleDivisor("36px 0")}
 
         <!-- Frase inspiradora -->
-        <p style="font-size: 15px; color: ${C.textoCuerpo}; font-style: italic; margin: 36px 0; line-height: 1.7;">
+        <p style="font-family:${FUENTE}; font-size:15px; color:${C.textoCuerpo}; font-style:italic; margin:0 0 36px 0; line-height:1.75; text-align:center;">
           “Un cumpleaños no solo celebra el paso del tiempo, sino la huella que
           dejas en quienes te rodean.”
         </p>
 
         <!-- Tu camino en VENTEL -->
-        ${etiquetaSeccion("Tu camino en VENTEL")}
-        <p style="margin: 6px 0 0; font-size: 15px; color: ${C.textoCuerpo}; line-height: 1.7;">
-          Cada año suma experiencia, fortalece tu talento y te acerca más a tus
-          metas. Sigue adelante: estamos contigo en cada paso.
-        </p>
+        <div style="border-top:1px solid #ECECEC; padding-top:30px;">
+          ${etiquetaSeccion("Tu camino en VENTEL")}
+          <p style="font-family:${FUENTE}; margin:8px 0 0; font-size:15px; color:${C.textoCuerpo}; line-height:1.75;">
+            Cada año suma experiencia, fortalece tu talento y te acerca más a tus
+            metas. Sigue adelante: estamos contigo en cada paso.
+          </p>
+        </div>
 
-        ${divisorMinimal()}
+        <p style="font-family:${FUENTE}; margin:34px 0 0; font-size:15px; color:${C.textoTitulo}; line-height:1.6;">
+          Con cariño,<br><strong style="font-weight:600;">tu equipo VENTEL</strong>
+        </p>
     `
   });
 }

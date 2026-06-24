@@ -204,6 +204,7 @@ function construirCorreoMotivador(persona, mostrarLeyenda) {
   }
 
   return envolturaLiverpool({
+    preheader: `Faltan ${persona.diasRestantes} día${plural} para el cumpleaños de ${persona.nombre}.`,
     pie: "Cultura y cercanía VENTEL.",
     contenido: `
         ${etiquetaSeccion("Próximo cumpleaños")}
@@ -262,10 +263,11 @@ function construirCorreoHoy(persona) {
   const C = CONFIG.marca.colores;
 
   return envolturaLiverpool({
-    paddingHeader: "40px 20px 34px",
+    preheader: `Hoy celebramos a ${persona.nombre} en VENTEL.`,
+    paddingHeader: "44px 24px 36px",
     headerExtra: `
-        <div style="color: rgba(255,255,255,0.85); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; margin: 26px 0 12px;">Día especial VENTEL</div>
-        <h1 style="color: #ffffff; margin: 0; font-size: 30px; font-weight: 600; line-height: 1.25;">
+        <div style="font-family:${FUENTE}; color:rgba(255,255,255,0.9); font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:2.5px; margin:28px 0 12px;">Día especial VENTEL</div>
+        <h1 style="font-family:${FUENTE}; color:#ffffff; margin:0; font-size:30px; font-weight:600; line-height:1.2; letter-spacing:-0.3px;">
           Felicidades, ${persona.nombre}
         </h1>`,
     contenido: `

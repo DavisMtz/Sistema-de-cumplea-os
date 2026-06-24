@@ -56,6 +56,7 @@ function construirCorreoConfirmacion(persona) {
   });
 
   return envolturaLiverpool({
+    preheader: `Tu registro de cumpleaños quedó guardado, ${(persona.nombre || "").toString().split(/\s+/)[0]}.`,
     pie: "Tu registro quedó guardado correctamente.",
     contenido: `
         ${etiquetaSeccion("Confirmado el " + fechaHoy)}
