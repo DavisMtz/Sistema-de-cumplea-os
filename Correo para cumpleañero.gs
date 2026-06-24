@@ -58,38 +58,42 @@ function construirCorreoCumpleanero(nombre) {
         </h1>
         <div style="margin-top:18px; color:rgba(255,255,255,0.9); font-size:13px; letter-spacing:8px; line-height:1;">&#10022;&nbsp;&#10022;&nbsp;&#10022;</div>`,
     contenido: `
-        <p style="font-family:${FUENTE}; font-size:18px; color:${C.textoTitulo}; margin:0 0 8px 0; line-height:1.5; font-weight:600; text-align:center;">
-          Hoy es tu día, ${primerNombre}.
-        </p>
-        <p style="font-family:${FUENTE}; font-size:16px; color:${C.textoCuerpo}; margin:0 0 32px 0; line-height:1.75; text-align:center;">
-          En VENTEL no solo celebramos un año más de tu vida, sino todo lo que
-          representas para nosotros.
-        </p>
-
-        <!-- Frase destacada: acento rosa, centrada y con aire -->
-        <p style="font-family:${FUENTE}; margin:0 auto; max-width:420px; font-size:17px; color:${C.textoTitulo}; line-height:1.55; text-align:center; font-weight:600;">
-          Eres el corazón de nuestras felicitaciones.
-        </p>
-
-        ${sparkleDivisor("36px 0")}
-
-        <!-- Frase inspiradora -->
-        <p style="font-family:${FUENTE}; font-size:15px; color:${C.textoCuerpo}; font-style:italic; margin:0 0 36px 0; line-height:1.75; text-align:center;">
-          “Un cumpleaños no solo celebra el paso del tiempo, sino la huella que
-          dejas en quienes te rodean.”
-        </p>
-
-        <!-- Tu camino en VENTEL -->
-        <div style="border-top:1px solid #ECECEC; padding-top:30px;">
-          ${etiquetaSeccion("Tu camino en VENTEL")}
-          <p style="font-family:${FUENTE}; margin:8px 0 0; font-size:15px; color:${C.textoCuerpo}; line-height:1.75;">
-            Cada año suma experiencia, fortalece tu talento y te acerca más a tus
-            metas. Sigue adelante: estamos contigo en cada paso.
+        <div style="text-align:center;">
+          <p style="font-family:${FUENTE}; font-size:22px; color:${C.textoTitulo}; margin:0 0 10px 0; line-height:1.4; font-weight:700; letter-spacing:-0.3px;">
+            Hoy es tu día, ${primerNombre}.
+          </p>
+          <p style="font-family:${FUENTE}; font-size:16px; color:${C.textoCuerpo}; margin:0; line-height:1.75;">
+            No solo celebramos un año más de tu vida, sino todo lo que
+            representas para nosotros.
           </p>
         </div>
 
-        <p style="font-family:${FUENTE}; margin:34px 0 0; font-size:15px; color:${C.textoTitulo}; line-height:1.6;">
-          Con cariño,<br><strong style="font-weight:600;">tu equipo VENTEL</strong>
+        ${puntosDecorativos({ margen: "32px 0" })}
+
+        <!-- Frase destacada dentro de tarjeta rosa (forma) -->
+        ${tarjeta(`
+          <p style="font-family:${FUENTE}; margin:0; font-size:20px; color:${C.rosaProfundo}; line-height:1.45; text-align:center; font-weight:700; letter-spacing:-0.3px;">
+            Eres el corazón de<br>nuestras felicitaciones.
+          </p>
+        `, { bg: C.rosaTinte, padding: "30px 28px", radius: "20px" })}
+
+        <!-- Frase inspiradora -->
+        <p style="font-family:${FUENTE}; font-size:15px; color:${C.textoCuerpo}; font-style:italic; margin:36px 0; line-height:1.8; text-align:center;">
+          “Un cumpleaños no solo celebra el paso del tiempo,<br>sino la huella que
+          dejas en quienes te rodean.”
+        </p>
+
+        <!-- Tu camino en VENTEL: tarjeta neutra -->
+        ${tarjeta(`
+          ${etiquetaSeccion("Tu camino en VENTEL")}
+          <p style="font-family:${FUENTE}; margin:10px 0 0; font-size:15px; color:${C.textoCuerpo}; line-height:1.75;">
+            Cada año suma experiencia, fortalece tu talento y te acerca más a tus
+            metas. Sigue adelante: estamos contigo en cada paso.
+          </p>
+        `, { bg: C.neutroTinte, padding: "24px 26px" })}
+
+        <p style="font-family:${FUENTE}; margin:34px 0 0; font-size:15px; color:${C.textoTitulo}; line-height:1.6; text-align:center;">
+          Con cariño,<br><strong style="font-weight:700; color:${C.primario};">tu equipo VENTEL</strong>
         </p>
     `
   });

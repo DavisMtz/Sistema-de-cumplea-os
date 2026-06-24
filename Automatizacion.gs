@@ -62,9 +62,14 @@ const CONFIG = {
       primario: "#E10098", // Rosa Institucional Liverpool
       secundario: "#2B2B2B", // Gris Oscuro para contrastes elegantes
       acento: "#FF00A0", // Rosa brillante para botones
-      fondo: "#F3F4F6", // Gris extra claro para el fondo del correo
-      textoTitulo: "#111827", // Casi negro para legibilidad
-      textoCuerpo: "#4B5563" // Gris medio para lectura cómoda
+      fondo: "#F4F1F4", // Fondo neutro cálido del correo
+      textoTitulo: "#1A1320", // Tinta para titulares
+      textoCuerpo: "#5A5560", // Gris medio para lectura cómoda
+      // --- Familia rosa para formas y tintes (Gmail-safe) ---
+      rosaProfundo: "#A8006F", // Rosa oscuro para texto/acento sobre tintes
+      rosaTinte: "#FCE3F1",    // Rosa muy claro para tarjetas/círculos
+      rosaTinte2: "#F9D2E7",   // Rosa claro para bandas y bordes
+      neutroTinte: "#F4F2F5"   // Gris cálido muy claro para tarjetas neutras
     }
   },
 
@@ -207,34 +212,38 @@ function construirCorreoMotivador(persona, mostrarLeyenda) {
     preheader: `Faltan ${persona.diasRestantes} día${plural} para el cumpleaños de ${persona.nombre}.`,
     pie: "Cultura y cercanía VENTEL.",
     contenido: `
-        ${etiquetaSeccion("Próximo cumpleaños")}
-        <h2 style="color: ${C.textoTitulo}; margin: 0 0 28px 0; font-size: 24px; font-weight: 600; line-height: 1.3;">
-          Preparémonos para celebrar
-        </h2>
-
-        <!-- Contador tipográfico monocromático -->
-        <div style="margin: 0 0 4px 0;">
-          <span style="font-size: 52px; font-weight: 600; line-height: 1; color: ${C.primario};">${persona.diasRestantes}</span>
-          <span style="font-size: 13px; font-weight: 600; letter-spacing: 1.4px; text-transform: uppercase; color: #9CA3AF; margin-left: 8px;">día${plural} para el festejo</span>
-        </div>
-        ${fraseDias ? `<p style="margin: 0 0 30px 0; font-size: 14px; color: ${C.textoCuerpo}; line-height: 1.6;">${fraseDias}</p>` : `<div style="height: 24px;"></div>`}
-
-        <!-- Festejado: línea fina, sin caja -->
-        <div style="border-top: 1px solid #F0F0F0; padding-top: 24px;">
-          <p style="margin: 0; font-size: 16px; color: ${C.textoTitulo}; line-height: 1.6;">
-            <strong style="font-weight: 600;">${persona.nombre}</strong> cumple años el ${persona.dia} de ${persona.mesTexto}.
-          </p>
+        <div style="text-align:center;">
+          ${etiquetaSeccion("Próximo cumpleaños")}
+          <h2 style="font-family:${FUENTE}; color:${C.textoTitulo}; margin:10px 0 28px 0; font-size:26px; font-weight:700; line-height:1.3; letter-spacing:-0.4px;">
+            Preparémonos para celebrar
+          </h2>
         </div>
 
-        <div style="margin-top: 34px;">
-          ${etiquetaSeccion("Preferencias")}
+        <!-- Contador en círculo grande (forma + juego de tamaños) -->
+        ${circulo(String(persona.diasRestantes), "día" + plural, { tam: 140 })}
+        ${fraseDias ? `<p style="font-family:${FUENTE}; text-align:center; margin:18px auto 0; max-width:360px; font-size:15px; color:${C.textoCuerpo}; line-height:1.6;">${fraseDias}</p>` : ""}
+
+        <!-- Festejado en pill -->
+        <div style="text-align:center; margin:28px 0 0;">
+          ${pill(persona.nombre + " · " + persona.dia + " de " + persona.mesTexto, { bg: C.neutroTinte, color: C.textoTitulo })}
         </div>
-        ${generarDetallesHTML(persona)}
+
+        <!-- Preferencias en tarjeta -->
+        <div style="margin-top:32px;">
+          ${tarjeta(`
+            ${etiquetaSeccion("Preferencias")}
+            ${generarDetallesHTML(persona)}
+          `, { bg: C.neutroTinte, padding: "20px 24px" })}
+        </div>
 
         ${mostrarLeyenda ? `
-        <p style="margin: 28px 0 0; padding-left: 14px; border-left: 2px solid ${C.primario}; font-size: 13px; color: ${C.textoCuerpo}; line-height: 1.6;">
-          Este integrante pertenece al Equipo Alejandra Castro — Ventas.
-        </p>` : ""}
+        <div style="margin-top:24px;">
+          ${tarjeta(`
+            <p style="font-family:${FUENTE}; margin:0; font-size:13px; color:${C.rosaProfundo}; line-height:1.6;">
+              <strong style="font-weight:700;">Nota.</strong> Este integrante pertenece al Equipo Alejandra Castro — Ventas.
+            </p>
+          `, { bg: C.rosaTinte, padding: "16px 20px", radius: "14px" })}
+        </div>` : ""}
     `
   });
 }
@@ -271,22 +280,25 @@ function construirCorreoHoy(persona) {
           Felicidades, ${persona.nombre}
         </h1>`,
     contenido: `
-        ${etiquetaSeccion(fechaHoy)}
-        <p style="font-size: 16px; color: ${C.textoCuerpo}; margin: 14px 0 0 0; line-height: 1.7;">
-          Hoy celebramos tu vida y todo el valor que aportas al equipo. Un detalle,
-          una sonrisa o un simple mensaje hacen la diferencia.
-        </p>
-
-        <div style="margin-top: 36px;">
-          ${etiquetaSeccion("Para consentirle hoy")}
+        <div style="text-align:center;">
+          ${pill(fechaHoy)}
+          <p style="font-family:${FUENTE}; font-size:16px; color:${C.textoCuerpo}; margin:18px 0 0 0; line-height:1.75;">
+            Hoy celebramos su día y todo lo que aporta al equipo. Un detalle, una
+            sonrisa o un simple mensaje hacen la diferencia.
+          </p>
         </div>
-        ${generarDetallesHTML(persona)}
 
-        <div style="margin: 40px 0 4px;">
-          <a href="mailto:${persona.nombre.replace(/\s+/g, '.').toLowerCase()}@liverpool.com.mx"
-             style="color: ${C.primario}; text-decoration: none; font-weight: 600; font-size: 15px; display: inline-block; padding-bottom: 4px; border-bottom: 1.5px solid ${C.primario};">
-             Enviar felicitación &rarr;
-          </a>
+        ${puntosDecorativos({ margen: "30px 0" })}
+
+        <!-- Preferencias en tarjeta -->
+        ${tarjeta(`
+          ${etiquetaSeccion("Para consentirle hoy")}
+          ${generarDetallesHTML(persona)}
+        `, { bg: C.neutroTinte, padding: "20px 24px" })}
+
+        <!-- CTA con forma de botón -->
+        <div style="margin:36px 0 4px;">
+          ${botonRedondeado("Enviar felicitación", "mailto:" + persona.nombre.replace(/\s+/g, '.').toLowerCase() + "@liverpool.com.mx")}
         </div>
     `
   });

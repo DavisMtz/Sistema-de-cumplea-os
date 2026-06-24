@@ -55,33 +55,40 @@ function construirCorreoConfirmacion(persona) {
     comentario: persona.comentario
   });
 
+  const primerNombre = (persona.nombre || "").toString().trim().split(/\s+/)[0] || persona.nombre;
+  const mesAbrev = (persona.mesTexto || "").toString().slice(0, 3).toUpperCase();
+
   return envolturaLiverpool({
-    preheader: `Tu registro de cumpleaños quedó guardado, ${(persona.nombre || "").toString().split(/\s+/)[0]}.`,
+    preheader: `Tu registro de cumpleaños quedó guardado, ${primerNombre}.`,
     pie: "Tu registro quedó guardado correctamente.",
     contenido: `
-        ${etiquetaSeccion("Confirmado el " + fechaHoy)}
-        <h2 style="color: ${C.textoTitulo}; margin: 12px 0 8px 0; font-size: 24px; font-weight: 600; line-height: 1.3;">
-          Gracias, ${persona.nombre}
-        </h2>
-        <p style="color: ${C.textoCuerpo}; font-size: 15px; margin: 0 0 32px 0; line-height: 1.7;">
-          Tu respuesta fue registrada con éxito. Este es el resumen de la
-          información que capturaste en el sistema de cumpleaños de VENTEL.
-        </p>
-
-        <!-- Fecha de cumpleaños: bloque tipográfico, sin caja -->
-        ${bloqueFecha("Tu cumpleaños", persona.dia + " de " + persona.mesTexto)}
-
-        <div style="margin-top: 32px;">
-          ${etiquetaSeccion("Tus preferencias registradas")}
+        <div style="text-align:center;">
+          ${pill("Registro confirmado")}
+          <h2 style="font-family:${FUENTE}; color:${C.textoTitulo}; margin:18px 0 8px 0; font-size:26px; font-weight:700; line-height:1.3; letter-spacing:-0.4px;">
+            ¡Gracias, ${primerNombre}!
+          </h2>
+          <p style="font-family:${FUENTE}; color:${C.textoCuerpo}; font-size:15px; margin:0 0 32px 0; line-height:1.7;">
+            Tu respuesta quedó registrada. Este es el resumen de tu
+            información en el sistema de cumpleaños de VENTEL.
+          </p>
         </div>
-        ${detalles}
 
-        <p style="font-size: 14px; color: ${C.textoCuerpo}; margin-top: 28px; line-height: 1.7;">
-          ¿Necesitas corregir algo? Acércate con alguna supervisora o apoyo en
-          turno y con gusto lo actualizamos.
+        <!-- Fecha en círculo (forma + juego de tamaños) -->
+        ${circulo(String(persona.dia), mesAbrev, { tam: 132 })}
+        <p style="font-family:${FUENTE}; text-align:center; margin:16px 0 0; font-size:13px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:#9A9A9A;">Tu cumpleaños</p>
+
+        <!-- Preferencias dentro de tarjeta -->
+        <div style="margin-top:36px;">
+          ${tarjeta(`
+            ${etiquetaSeccion("Tus preferencias registradas")}
+            ${detalles}
+          `, { bg: C.neutroTinte, padding: "20px 24px" })}
+        </div>
+
+        <p style="font-family:${FUENTE}; font-size:14px; color:${C.textoCuerpo}; margin:28px 0 0; line-height:1.7; text-align:center;">
+          ¿Necesitas corregir algo? Acércate con una supervisora o apoyo en turno
+          y con gusto lo actualizamos.
         </p>
-
-        ${divisorMinimal()}
     `
   });
 }

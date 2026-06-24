@@ -190,6 +190,105 @@ function sparkleDivisor(margen) {
   return `<div style="text-align:center; margin:${m}; font-family:${FUENTE}; color:${c.primario}; font-size:14px; letter-spacing:8px; line-height:1;">&#10022;&nbsp;&#10022;&nbsp;&#10022;</div>`;
 }
 
+// ============================================================================
+// FORMAS (todas Gmail-safe: tablas + border-radius + background-color)
+// ============================================================================
+
+/**
+ * Tarjeta redondeada con fondo de color (tinte). Aporta "forma" sin imágenes.
+ * @param {string} contenido HTML interno.
+ * @param {Object} [o] { bg, padding, radius, borde, align }
+ */
+function tarjeta(contenido, o) {
+  o = o || {};
+  const bg = o.bg || CONFIG.marca.colores.neutroTinte;
+  const padding = o.padding || "24px 26px";
+  const radius = o.radius || "18px";
+  const borde = o.borde ? `border:1px solid ${o.borde};` : "";
+  const align = o.align || "left";
+  return `
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0;">
+      <tr>
+        <td align="${align}" bgcolor="${bg}" style="background-color:${bg}; border-radius:${radius}; ${borde} padding:${padding}; font-family:${FUENTE};">
+          ${contenido}
+        </td>
+      </tr>
+    </table>`;
+}
+
+/**
+ * Pastilla (pill) redondeada para etiquetas cortas.
+ * @param {string} texto
+ * @param {Object} [o] { bg, color }
+ */
+function pill(texto, o) {
+  o = o || {};
+  const c = CONFIG.marca.colores;
+  const bg = o.bg || c.rosaTinte;
+  const color = o.color || c.rosaProfundo;
+  return `<span style="display:inline-block; background-color:${bg}; color:${color}; font-family:${FUENTE}; font-size:11px; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; padding:7px 15px; border-radius:999px; line-height:1;">${texto}</span>`;
+}
+
+/**
+ * Círculo con un número grande y un subtítulo pequeño (juego de tamaños).
+ * @param {string} grande Texto/numeral principal.
+ * @param {string} chico  Subtítulo pequeño.
+ * @param {Object} [o] { tam, bg, fg, fgChico }
+ */
+function circulo(grande, chico, o) {
+  o = o || {};
+  const c = CONFIG.marca.colores;
+  const tam = o.tam || 132;
+  const bg = o.bg || c.rosaTinte;
+  const fg = o.fg || c.primario;
+  const fgChico = o.fgChico || c.rosaProfundo;
+  const radio = Math.round(tam / 2);
+  return `
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto;">
+      <tr>
+        <td width="${tam}" height="${tam}" align="center" valign="middle" bgcolor="${bg}" style="width:${tam}px; height:${tam}px; background-color:${bg}; border-radius:${radio}px; text-align:center; vertical-align:middle;">
+          <div style="font-family:${FUENTE}; font-size:${Math.round(tam*0.42)}px; font-weight:700; color:${fg}; line-height:1; letter-spacing:-1px;">${grande}</div>
+          ${chico ? `<div style="font-family:${FUENTE}; font-size:11px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:${fgChico}; margin-top:6px;">${chico}</div>` : ""}
+        </td>
+      </tr>
+    </table>`;
+}
+
+/** Tres puntos decorativos de tamaños distintos (motivo de formas). */
+function puntosDecorativos(o) {
+  o = o || {};
+  const c = CONFIG.marca.colores;
+  const grande = o.grande || c.primario;
+  const chico = o.chico || c.rosaTinte2;
+  const margen = o.margen || "30px 0";
+  const cel = (d, color) => `<td style="padding:0 6px;"><div style="width:${d}px; height:${d}px; background-color:${color}; border-radius:${Math.round(d/2)}px; line-height:${d}px; font-size:1px;">&nbsp;</div></td>`;
+  return `
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:${margen};">
+      <tr>${cel(8, chico)}${cel(13, grande)}${cel(8, chico)}</tr>
+    </table>`;
+}
+
+/**
+ * Botón redondeado bulletproof (CTA).
+ * @param {string} texto
+ * @param {string} href
+ * @param {Object} [o] { bg, color }
+ */
+function botonRedondeado(texto, href, o) {
+  o = o || {};
+  const c = CONFIG.marca.colores;
+  const bg = o.bg || c.primario;
+  const color = o.color || "#ffffff";
+  return `
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto;">
+      <tr>
+        <td align="center" bgcolor="${bg}" style="background-color:${bg}; border-radius:999px;">
+          <a href="${href}" style="display:inline-block; padding:15px 34px; font-family:${FUENTE}; font-size:15px; font-weight:600; color:${color}; text-decoration:none; border-radius:999px;">${texto}</a>
+        </td>
+      </tr>
+    </table>`;
+}
+
 // Compatibilidad hacia atrás.
 function divisorMinimal() { return reglaFina(); }
 function cintilloDegradado() { return reglaFina(); }
