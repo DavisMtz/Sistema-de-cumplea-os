@@ -38,14 +38,16 @@ Toda la marca vive en un solo lugar: la constante `CONFIG.marca` en `Automatizac
 | 💖 Rosa brillante | `#FF00A0` | Acentos y degradados |
 | ⬜ Gris claro | `#F3F4F6` | Fondo de los correos |
 
-El **código de colores por urgencia** del panel y los recordatorios:
+El **código de colores por urgencia** del panel (tipo semáforo, con leyenda visible en la hoja):
 
 | Cercanía | Color |
 |----------|-------|
 | 🎉 **HOY** | Rosa Liverpool |
-| 🔴 ≤ 3 días | Rojo |
-| 🟣 ≤ 10 días | Morado |
-| 🔵 Más lejano | Azul suave |
+| 🔴 ≤ 3 días | Rojo (urgente) |
+| 🟡 ≤ 7 días | Amarillo (esta semana) |
+| 🟢 Resto del mes | Verde (con tiempo de planear) |
+
+El panel de la hoja `Proximos` muestra **toda** la información útil para organizar cada festejo: nombre, fecha con día de la semana, días restantes, qué prefiere (pastel/comida), sabor del pastel, qué le gustaría, color favorito, comentarios y teléfono.
 
 ---
 
