@@ -25,6 +25,11 @@ const DASH_COLUMNAS = [
 ];
 
 function actualizarDashboard(lista) {
+  // Blindaje: esta función está pensada para llamarse desde
+  // encontrarProximoCumpleaños(). Si se ejecuta sola (sin parámetro), no truena:
+  // simplemente dibuja el panel vacío.
+  lista = Array.isArray(lista) ? lista : [];
+
   const hoja = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(CONFIG.hojas.proximos);
   if (!hoja) return;
 
