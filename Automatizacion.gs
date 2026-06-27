@@ -45,6 +45,13 @@ const CONFIG = {
   marca: {
     nombreRemitente: "Notificaciones VENTEL",
     logoURL: "https://assetspwa.liverpool.com.mx/assets/digital/mailings/img/liv_w.png",
+    // (Opcional) URLs alojadas de los íconos SVG/PNG para compatibilidad total
+    // con Gmail/Outlook. Si se dejan vacías, se usan los SVG inline de Plantillas.gs.
+    // Sube los archivos de /assets/icons al CDN y pega aquí sus URLs.
+    iconosURL: {
+      // telefono: "", color: "", pastel: "", comida: "",
+      // regalo: "", comentario: "", calendario: "", divisor: ""
+    },
     // Responsable técnico (se muestra en el pie de todos los correos)
     responsable: {
       nombre: "David Martínez Arredondo",
@@ -55,9 +62,14 @@ const CONFIG = {
       primario: "#E10098", // Rosa Institucional Liverpool
       secundario: "#2B2B2B", // Gris Oscuro para contrastes elegantes
       acento: "#FF00A0", // Rosa brillante para botones
-      fondo: "#F3F4F6", // Gris extra claro para el fondo del correo
-      textoTitulo: "#111827", // Casi negro para legibilidad
-      textoCuerpo: "#4B5563" // Gris medio para lectura cómoda
+      fondo: "#F4F1F4", // Fondo neutro cálido del correo
+      textoTitulo: "#1A1320", // Tinta para titulares
+      textoCuerpo: "#5A5560", // Gris medio para lectura cómoda
+      // --- Familia rosa para formas y tintes (Gmail-safe) ---
+      rosaProfundo: "#A8006F", // Rosa oscuro para texto/acento sobre tintes
+      rosaTinte: "#FCE3F1",    // Rosa muy claro para tarjetas/círculos
+      rosaTinte2: "#F9D2E7",   // Rosa claro para bandas y bordes
+      neutroTinte: "#F4F2F5"   // Gris cálido muy claro para tarjetas neutras
     }
   },
 
@@ -144,66 +156,11 @@ function encontrarProximoCumpleaños() {
 // ============================================================================
 
 function enviarCorreoMotivador(persona) {
-  const asuntoBase = "🎂 Recordatorio: Un cumpleaños especial en VENTEL";
+  const asuntoBase = "Recordatorio · Próximo cumpleaños en VENTEL";
   const asunto = CONFIG.modoPrueba ? `[PRUEBA] ${asuntoBase}` : asuntoBase;
   
-  let fraseDias = "";
-  let colorBadge = "#3B82F6"; // Azul por defecto
-  let bgBadge = "#EFF6FF";
-
-  if (persona.diasRestantes === 10) {
-    fraseDias = "Aún hay tiempo de planear algo increíble.";
-    colorBadge = "#8B5CF6"; bgBadge = "#F5F3FF"; // Morado
-  } else if (persona.diasRestantes === 3) {
-    fraseDias = "¡Ya casi es el día! Afinando los últimos detalles.";
-    colorBadge = "#F59E0B"; bgBadge = "#FFFBEB"; // Ambar
-  } else if (persona.diasRestantes === 1) {
-    fraseDias = "¡Mañana es el gran día! 💥 No dejemos pasar la oportunidad.";
-    colorBadge = "#EF4444"; bgBadge = "#FEF2F2"; // Rojo
-  }
-
   const incluirLeyenda = persona.filaSheet >= 2 && persona.filaSheet <= 20;
-  const C = CONFIG.marca.colores;
-
-  const renderHTML = (mostrarLeyenda) => envolturaLiverpool({
-    pie: "Cultura y Cercanía VENTEL",
-    contenido: `
-        <h2 style="color: ${C.textoTitulo}; text-align: center; margin: 0 0 8px 0; font-size: 24px; font-weight: 700;">
-          ¡Preparémonos para celebrar! 🎉
-        </h2>
-        <p style="text-align: center; color: ${C.textoCuerpo}; font-size: 15px; margin: 0 0 30px 0;">
-          Un miembro clave de la familia VENTEL está por cumplir años.
-        </p>
-
-        <!-- Contador visual grande de días -->
-        <div style="text-align: center; margin: 0 0 30px 0;">
-          <div style="display: inline-block; background-color: ${bgBadge}; border: 2px solid ${colorBadge}; border-radius: 16px; padding: 18px 30px;">
-            <div style="font-size: 42px; font-weight: 800; line-height: 1; color: ${colorBadge};">${persona.diasRestantes}</div>
-            <div style="font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: ${colorBadge}; margin-top: 4px;">
-              día${persona.diasRestantes > 1 ? 's' : ''} para el festejo
-            </div>
-          </div>
-        </div>
-
-        <!-- Caja principal -->
-        <div style="background-color: ${bgBadge}; border-left: 4px solid ${colorBadge}; padding: 18px 20px; border-radius: 0 8px 8px 0; margin-bottom: 30px;">
-          <p style="margin: 0 0 6px 0; font-size: 16px; color: ${C.textoTitulo};">
-            Cumpleaños de <strong>${persona.nombre}</strong> el <strong>${persona.dia} de ${persona.mesTexto}</strong>.
-          </p>
-          <p style="margin: 0; font-size: 14px; color: ${colorBadge}; font-weight: 600;">${fraseDias}</p>
-        </div>
-
-        <h3 style="font-size: 15px; color: ${C.textoTitulo}; margin: 0; text-transform: uppercase; letter-spacing: 0.5px;">Detalles de Preferencias</h3>
-        ${generarDetallesHTML(persona)}
-
-        ${mostrarLeyenda ? `
-        <div style="margin-top: 25px; background-color: #FFF1F2; padding: 16px; border-radius: 10px; border: 1px dashed #FECDD3; text-align: center;">
-          <p style="margin: 0; color: #BE123C; font-size: 14px; font-weight: 500;">
-            📌 <strong>Nota:</strong> Este integrante pertenece al <br>Equipo Alejandra Castro – Ventas
-          </p>
-        </div>` : ""}
-    `
-  });
+  const renderHTML = (mostrarLeyenda) => construirCorreoMotivador(persona, mostrarLeyenda);
 
   let destinatariosLeyenda = [];
   let destinatariosNormales = [];
@@ -234,50 +191,115 @@ function enviarCorreoMotivador(persona) {
   }
 }
 
-function enviarCorreoHoy(persona) {
-  const asuntoBase = `🎉 ¡Hoy celebramos a ${persona.nombre}! - VENTEL`;
-  const asunto = CONFIG.modoPrueba ? `[PRUEBA] ${asuntoBase}` : asuntoBase;
-  
-  const fechaHoy = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), "dd 'de' MMMM 'de' yyyy");
+/**
+ * Construye el HTML del recordatorio (monocromático minimalista).
+ * Separado del envío para poder generar vistas previas sin enviar correos.
+ */
+function construirCorreoMotivador(persona, mostrarLeyenda) {
   const C = CONFIG.marca.colores;
-  const botonColor = persona.color ? persona.color.toLowerCase() : C.acento;
+  const plural = persona.diasRestantes > 1 ? "s" : "";
 
-  const htmlBody = envolturaLiverpool({
-    sombraFuerte: true,
-    paddingHeader: "35px 20px",
-    headerExtra: `
-        <div style="display: inline-block; background-color: rgba(255,255,255,0.2); border-radius: 30px; padding: 6px 16px; margin: 25px 0 15px;">
-          <span style="color: #ffffff; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Día Especial VENTEL</span>
-        </div>
-        <h1 style="color: #ffffff; margin: 0; font-size: 32px; font-weight: 800; line-height: 1.2;">
-          ¡Felicidades,<br>${persona.nombre}!
-        </h1>`,
+  let fraseDias = "";
+  if (persona.diasRestantes === 10) {
+    fraseDias = "Aún hay tiempo de planear algo especial.";
+  } else if (persona.diasRestantes === 3) {
+    fraseDias = "Ya casi es el día. Afinando los últimos detalles.";
+  } else if (persona.diasRestantes === 1) {
+    fraseDias = "Mañana es el gran día. No lo dejemos pasar.";
+  }
+
+  return envolturaLiverpool({
+    preheader: `Faltan ${persona.diasRestantes} día${plural} para el cumpleaños de ${persona.nombre}.`,
+    pie: "Cultura y cercanía VENTEL.",
     contenido: `
-        <p style="text-align: right; font-size: 13px; color: #9CA3AF; margin: 0 0 20px 0; font-weight: 500;">📅 ${fechaHoy}</p>
-
-        <p style="font-size: 16px; text-align: center; color: ${C.textoCuerpo}; margin: 0 0 35px 0; line-height: 1.6;">
-          Hoy celebramos tu vida y todo el valor que aportas a nuestro equipo. Un detalle, una sonrisa o un simple mensaje hacen la diferencia hoy.
-        </p>
-
-        <h3 style="font-size: 15px; color: ${C.textoTitulo}; margin: 0; text-transform: uppercase; letter-spacing: 0.5px;">Para consentirle hoy:</h3>
-        ${generarDetallesHTML(persona)}
-
-        <div style="text-align: center; margin: 45px 0 20px;">
-          <a href="mailto:${persona.nombre.replace(/\s+/g, '.').toLowerCase()}@liverpool.com.mx"
-             style="background-color: ${botonColor}; color: #ffffff; text-decoration: none; padding: 16px 36px; border-radius: 8px; font-weight: 600; font-size: 16px; display: inline-block; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: opacity 0.3s;">
-             ✉️ Enviar felicitación
-          </a>
+        <div style="text-align:center;">
+          ${etiquetaSeccion("Próximo cumpleaños")}
+          <h2 style="font-family:${FUENTE}; color:${C.textoTitulo}; margin:10px 0 28px 0; font-size:26px; font-weight:700; line-height:1.3; letter-spacing:-0.4px;">
+            Preparémonos para celebrar
+          </h2>
         </div>
+
+        <!-- Contador en círculo grande (forma + juego de tamaños) -->
+        ${circulo(String(persona.diasRestantes), "día" + plural, { tam: 140 })}
+        ${fraseDias ? `<p style="font-family:${FUENTE}; text-align:center; margin:18px auto 0; max-width:360px; font-size:15px; color:${C.textoCuerpo}; line-height:1.6;">${fraseDias}</p>` : ""}
+
+        <!-- Festejado en pill -->
+        <div style="text-align:center; margin:28px 0 0;">
+          ${pill(persona.nombre + " · " + persona.dia + " de " + persona.mesTexto, { bg: C.neutroTinte, color: C.textoTitulo })}
+        </div>
+
+        <!-- Preferencias en tarjeta -->
+        <div style="margin-top:32px;">
+          ${tarjeta(`
+            ${etiquetaSeccion("Preferencias")}
+            ${generarDetallesHTML(persona)}
+          `, { bg: C.neutroTinte, padding: "20px 24px" })}
+        </div>
+
+        ${mostrarLeyenda ? `
+        <div style="margin-top:24px;">
+          ${tarjeta(`
+            <p style="font-family:${FUENTE}; margin:0; font-size:13px; color:${C.rosaProfundo}; line-height:1.6;">
+              <strong style="font-weight:700;">Nota.</strong> Este integrante pertenece al Equipo Alejandra Castro — Ventas.
+            </p>
+          `, { bg: C.rosaTinte, padding: "16px 20px", radius: "14px" })}
+        </div>` : ""}
     `
   });
+}
 
+function enviarCorreoHoy(persona) {
+  const asuntoBase = `Hoy celebramos a ${persona.nombre} · VENTEL`;
+  const asunto = CONFIG.modoPrueba ? `[PRUEBA] ${asuntoBase}` : asuntoBase;
+  
   const bccDestinatarios = CONFIG.modoPrueba ? CONFIG.correoDesarrollador : CONFIG.destinatarios.join(",");
 
   MailApp.sendEmail({
     to: "noreply@liverpool.com.mx",
     bcc: bccDestinatarios,
     subject: asunto,
-    htmlBody: htmlBody,
+    htmlBody: construirCorreoHoy(persona),
     name: CONFIG.marca.nombreRemitente
+  });
+}
+
+/**
+ * Construye el HTML del correo "Hoy celebramos" (minimalista).
+ * Separado del envío para poder generar vistas previas sin enviar correos.
+ */
+function construirCorreoHoy(persona) {
+  const fechaHoy = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), "dd 'de' MMMM 'de' yyyy");
+  const C = CONFIG.marca.colores;
+
+  return envolturaLiverpool({
+    preheader: `Hoy celebramos a ${persona.nombre} en VENTEL.`,
+    paddingHeader: "44px 24px 36px",
+    headerExtra: `
+        <div style="font-family:${FUENTE}; color:rgba(255,255,255,0.9); font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:2.5px; margin:28px 0 12px;">Día especial VENTEL</div>
+        <h1 style="font-family:${FUENTE}; color:#ffffff; margin:0; font-size:30px; font-weight:600; line-height:1.2; letter-spacing:-0.3px;">
+          Felicidades, ${persona.nombre}
+        </h1>`,
+    contenido: `
+        <div style="text-align:center;">
+          ${pill(fechaHoy)}
+          <p style="font-family:${FUENTE}; font-size:16px; color:${C.textoCuerpo}; margin:18px 0 0 0; line-height:1.75;">
+            Hoy celebramos su día y todo lo que aporta al equipo. Un detalle, una
+            sonrisa o un simple mensaje hacen la diferencia.
+          </p>
+        </div>
+
+        ${puntosDecorativos({ margen: "30px 0" })}
+
+        <!-- Preferencias en tarjeta -->
+        ${tarjeta(`
+          ${etiquetaSeccion("Para consentirle hoy")}
+          ${generarDetallesHTML(persona)}
+        `, { bg: C.neutroTinte, padding: "20px 24px" })}
+
+        <!-- CTA con forma de botón -->
+        <div style="margin:36px 0 4px;">
+          ${botonRedondeado("Enviar felicitación", "mailto:" + persona.nombre.replace(/\s+/g, '.').toLowerCase() + "@liverpool.com.mx")}
+        </div>
+    `
   });
 }

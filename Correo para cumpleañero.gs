@@ -30,7 +30,7 @@ function enviarFelicitacionCumpleanero() {
 
     MailApp.sendEmail({
       to: correo,
-      subject: `🎈 ¡Hoy te celebramos, ${nombre}! 🎉 – VENTEL`,
+      subject: `Hoy te celebramos, ${nombre} · VENTEL`,
       htmlBody: construirCorreoCumpleanero(nombre),
       name: CONFIG.marca.nombreRemitente
     });
@@ -43,48 +43,58 @@ function enviarFelicitacionCumpleanero() {
  */
 function construirCorreoCumpleanero(nombre) {
   const C = CONFIG.marca.colores;
+  // Solo el primer nombre para un tono más cercano y personal.
+  const primerNombre = (nombre || "").toString().trim().split(/\s+/)[0] || nombre;
 
   return envolturaLiverpool({
-    sombraFuerte: true,
-    paddingHeader: "35px 20px",
-    pie: "¡Feliz cumpleaños de parte de todo el equipo! 🧡",
+    preheader: `Hoy todo el equipo VENTEL celebra contigo, ${primerNombre}.`,
+    // Header más alto y expresivo: este correo debe sentirse especial.
+    paddingHeader: "52px 28px 46px",
+    pie: "Con cariño, todo el equipo VENTEL.",
     headerExtra: `
-        <div style="display: inline-block; background-color: rgba(255,255,255,0.2); border-radius: 30px; padding: 6px 16px; margin: 25px 0 15px;">
-          <span style="color: #ffffff; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Tu día especial</span>
-        </div>
-        <h1 style="color: #ffffff; margin: 0; font-size: 30px; font-weight: 800; line-height: 1.2;">
-          ¡Feliz cumpleaños,<br>${nombre}! 🎂
-        </h1>`,
+        <div style="font-family:${FUENTE}; color:rgba(255,255,255,0.92); font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:3px; margin:30px 0 16px;">Feliz cumpleaños</div>
+        <h1 style="font-family:${FUENTE}; color:#ffffff; margin:0; font-size:40px; font-weight:700; line-height:1.1; letter-spacing:-0.5px;">
+          ${primerNombre}
+        </h1>
+        <div style="margin-top:18px; color:rgba(255,255,255,0.9); font-size:13px; letter-spacing:8px; line-height:1;">&#10022;&nbsp;&#10022;&nbsp;&#10022;</div>`,
     contenido: `
-        <p style="font-size: 16px; text-align: center; color: ${C.textoCuerpo}; margin: 0 0 30px 0; line-height: 1.6;">
-          En VENTEL no solo celebramos un año más de tu vida, sino todo lo que
-          representas para el equipo. <strong style="color: ${C.textoTitulo};">Hoy eres el corazón de nuestras felicitaciones.</strong> 💖
-        </p>
-
-        <!-- Mensaje destacado -->
-        <div style="background-color: #FFF1F2; border-left: 4px solid ${C.primario}; padding: 18px 20px; border-radius: 0 8px 8px 0; margin-bottom: 25px;">
-          <p style="margin: 0; font-size: 15px; color: ${C.textoTitulo}; line-height: 1.6;">
-            🌟 <strong>${nombre}, este día es para ti, por ti y contigo.</strong><br>
-            Todo el equipo te reconoce como una parte esencial de nuestro éxito en ventas.
+        <div style="text-align:center;">
+          <p style="font-family:${FUENTE}; font-size:22px; color:${C.textoTitulo}; margin:0 0 10px 0; line-height:1.4; font-weight:700; letter-spacing:-0.3px;">
+            Hoy es tu día, ${primerNombre}.
+          </p>
+          <p style="font-family:${FUENTE}; font-size:16px; color:${C.textoCuerpo}; margin:0; line-height:1.75;">
+            No solo celebramos un año más de tu vida, sino todo lo que
+            representas para nosotros.
           </p>
         </div>
 
+        ${puntosDecorativos({ margen: "32px 0" })}
+
+        <!-- Frase destacada dentro de tarjeta rosa (forma) -->
+        ${tarjeta(`
+          <p style="font-family:${FUENTE}; margin:0; font-size:20px; color:${C.rosaProfundo}; line-height:1.45; text-align:center; font-weight:700; letter-spacing:-0.3px;">
+            Eres el corazón de<br>nuestras felicitaciones.
+          </p>
+        `, { bg: C.rosaTinte, padding: "30px 28px", radius: "20px" })}
+
         <!-- Frase inspiradora -->
-        <p style="font-size: 15px; color: ${C.textoCuerpo}; text-align: center; font-style: italic; margin: 30px 0; line-height: 1.6;">
-          “Un cumpleaños no solo celebra el paso del tiempo, sino la huella que
+        <p style="font-family:${FUENTE}; font-size:15px; color:${C.textoCuerpo}; font-style:italic; margin:36px 0; line-height:1.8; text-align:center;">
+          “Un cumpleaños no solo celebra el paso del tiempo,<br>sino la huella que
           dejas en quienes te rodean.”
         </p>
 
-        <!-- Tu camino en VENTEL -->
-        <div style="background-color: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 10px; padding: 18px 20px;">
-          <p style="margin: 0; font-size: 14px; color: ${C.textoCuerpo}; line-height: 1.6;">
-            💼 <strong style="color: ${C.textoTitulo};">Tu camino en VENTEL sigue creciendo:</strong><br>
+        <!-- Tu camino en VENTEL: tarjeta neutra -->
+        ${tarjeta(`
+          ${etiquetaSeccion("Tu camino en VENTEL")}
+          <p style="font-family:${FUENTE}; margin:10px 0 0; font-size:15px; color:${C.textoCuerpo}; line-height:1.75;">
             Cada año suma experiencia, fortalece tu talento y te acerca más a tus
-            metas. ¡Sigue adelante, estamos contigo en cada paso!
+            metas. Sigue adelante: estamos contigo en cada paso.
           </p>
-        </div>
+        `, { bg: C.neutroTinte, padding: "24px 26px" })}
 
-        ${cintilloDegradado()}
+        <p style="font-family:${FUENTE}; margin:34px 0 0; font-size:15px; color:${C.textoTitulo}; line-height:1.6; text-align:center;">
+          Con cariño,<br><strong style="font-weight:700; color:${C.primario};">tu equipo VENTEL</strong>
+        </p>
     `
   });
 }
