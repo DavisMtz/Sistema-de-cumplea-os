@@ -89,8 +89,12 @@ var OPCIONES = {
  *  1. PUNTO DE ENTRADA DE LA WEBAPP
  * ========================================================================== */
 
-/** Plantilla con la configuración que necesita el cliente. */
-function construirPlantilla() {
+/**
+ * Plantilla con la configuración que necesita el cliente.
+ * @param {string} vista  'proximos' abre la app directo en el tablero de
+ *                        cumpleaños; cualquier otra cosa, en la actualización.
+ */
+function construirPlantilla(vista) {
   var t = HtmlService.createTemplateFromFile('actualizaciones');
   t.CFG = {
     organizacion: CONFIG.ORGANIZACION,
@@ -100,14 +104,21 @@ function construirPlantilla() {
     minutosCodigo: CONFIG.MINUTOS_VIGENCIA_CODIGO,
     esperaReenvio: CONFIG.SEGUNDOS_ESPERA_REENVIO,
     verificarAntes: CONFIG.VERIFICAR_ANTES_DE_CARGAR,
+    vistaInicial: vista === 'proximos' ? 'proximos' : 'actualizar',
     opciones: OPCIONES,
     meses: MESES
   };
   return t;
 }
 
-function doGet() {
-  return construirPlantilla().evaluate()
+/**
+ * `?vista=proximos` es el enlace profundo que usa el bot de Google Chat para
+ * llevar a la gente directo a la sección de próximos cumpleaños.
+ */
+function doGet(e) {
+  var vista = e && e.parameter ? e.parameter.vista : '';
+
+  return construirPlantilla(vista).evaluate()
     .setTitle(CONFIG.TITULO_APP + ' · ' + CONFIG.ORGANIZACION)
     .addMetaTag('viewport', 'width=device-width, initial-scale=1')
     .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);

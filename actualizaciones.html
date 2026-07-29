@@ -4,6 +4,7 @@
   Dos vistas:
     · Actualizar mis datos  → asistente de 3 pasos con clave dinámica.
     · Próximos cumpleaños   → quién cumple en los próximos 30 días.
+      Se abre directo con ?vista=proximos (enlace del bot de Google Chat).
 
   Lenguaje visual (referencia: tesla.com)
     · Fondo blanco absoluto. La estructura la da el aire, no las cajas.
@@ -2260,18 +2261,45 @@ poblarSelects();
 cargarAsesores();
 marcarPasos(1);
 
+/* Enlace profundo: con ?vista=proximos (el botón del bot de Google Chat)
+   la app abre directamente en el tablero de cumpleaños. */
+var arrancaEnProximos = CFG.vistaInicial === 'proximos';
+
+if (arrancaEnProximos) {
+  vistaActual = 'proximos';
+  $('#vista-actualizar').hidden = true;
+  $('#vista-proximos').hidden = false;
+
+  $$('.nav__link').forEach(function (b) {
+    if (b.dataset.vista === 'proximos') b.setAttribute('aria-current', 'page');
+    else b.removeAttribute('aria-current');
+  });
+
+  cargarProximos();
+}
+
 if (motion.activo) {
-  gsap.timeline()
-    .from('.nav', { opacity: 0, y: -12, duration: .5 })
-    .from('#vista-actualizar .anim-hero', {
-      opacity: 0, y: 20, duration: .6, stagger: .09, clearProps: 'transform'
-    }, '-=.28')
-    .from('#panel-1 .anim', {
-      opacity: 0, y: 16, duration: .5, stagger: .08, clearProps: 'transform'
-    }, '-=.42')
-    .from('.pie', { opacity: 0, duration: .45 }, '-=.3')
-    .add(function () { buscador.focus({ preventScroll: true }); });
-} else {
+  var entrada = gsap.timeline()
+    .from('.nav', { opacity: 0, y: -12, duration: .5 });
+
+  if (arrancaEnProximos) {
+    entrada
+      .from('#vista-proximos .anim-prox', {
+        opacity: 0, y: 20, duration: .6, stagger: .09, clearProps: 'transform'
+      }, '-=.28')
+      .from('.pie', { opacity: 0, duration: .45 }, '-=.3');
+  } else {
+    entrada
+      .from('#vista-actualizar .anim-hero', {
+        opacity: 0, y: 20, duration: .6, stagger: .09, clearProps: 'transform'
+      }, '-=.28')
+      .from('#panel-1 .anim', {
+        opacity: 0, y: 16, duration: .5, stagger: .08, clearProps: 'transform'
+      }, '-=.42')
+      .from('.pie', { opacity: 0, duration: .45 }, '-=.3')
+      .add(function () { buscador.focus({ preventScroll: true }); });
+  }
+} else if (!arrancaEnProximos) {
   buscador.focus();
 }
 </script>
